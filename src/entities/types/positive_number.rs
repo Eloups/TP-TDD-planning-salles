@@ -12,6 +12,11 @@ impl PositiveNumber {
 
         Ok(Self(number))
     }
+
+    /// Getter for the inner value
+    pub fn get(&self) -> u32 {
+        self.0
+    }
 }
 
 #[cfg(test)]
@@ -38,5 +43,12 @@ mod tests {
 
         let error = result.unwrap_err();
         assert_eq!(error, PositiveNumberError::NumberIsZero);
+    }
+
+    #[test]
+    fn get_positive_number_value_test() {
+        let positive_number = PositiveNumber::new(7).unwrap();
+
+        assert_eq!(positive_number.get(), 7);
     }
 }
