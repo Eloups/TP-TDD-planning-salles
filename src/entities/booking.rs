@@ -61,12 +61,11 @@ impl Booking {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
     use crate::entities::{
         errors::booking_error::BookingError,
         types::errors::positive_number_error::PositiveNumberError,
     };
-
-    use super::*;
 
     #[test]
     fn create_booking_test() {
@@ -205,7 +204,6 @@ mod tests {
         // Assert
         assert!(booking.is_err());
         assert_eq!(booking.unwrap_err(), BookingError::StartDateError);
-        // TODO fail si start > end
     }
 
     #[test]
