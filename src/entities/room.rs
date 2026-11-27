@@ -31,6 +31,24 @@ impl Room {
     pub fn get_max_capacity(&self) -> u32 {
         self.max_capacity
     }
+
+    /// Setter for the room name
+    pub fn set_name(&mut self, name: String) -> Result<(), RoomError> {
+        if name.is_empty() {
+            return Err(RoomError::EmptyNameError);
+        }
+        self.name = name;
+        Ok(())
+    }
+
+    /// Setter for the room name
+    pub fn set_max_capacity(&mut self, max_capacity: u32) -> Result<(), RoomError> {
+        if max_capacity == 0 {
+            return Err(RoomError::MaxCapacityError);
+        }
+        self.max_capacity = max_capacity;
+        Ok(())
+    }
 }
 
 #[cfg(test)]
@@ -45,9 +63,9 @@ mod tests {
 
         // Act
         let room = Room::new(name.clone(), max_capacity);
-        assert!(room.is_ok());
 
         // Assert
+        assert!(room.is_ok());
         assert_eq!(
             room.unwrap(),
             Room {
@@ -65,7 +83,7 @@ mod tests {
 
         // Act
         let room = Room::new(name.clone(), max_capacity);
-        
+
         // Assert
         assert!(room.is_err());
         assert_eq!(room.unwrap_err(), RoomError::EmptyNameError);
@@ -79,7 +97,7 @@ mod tests {
 
         // Act
         let room = Room::new(name.clone(), max_capacity);
-        
+
         // Assert
         assert!(room.is_err());
         assert_eq!(room.unwrap_err(), RoomError::MaxCapacityError);
@@ -93,9 +111,9 @@ mod tests {
 
         // Act
         let room = Room::new(name.clone(), max_capacity);
-        
-        // Assert
         assert!(room.is_ok());
+
+        // Assert
         assert_eq!(room.unwrap().get_name(), name);
     }
 
@@ -103,13 +121,93 @@ mod tests {
     fn get_room_max_capacity_test() {
         // Arrange
         let name = String::from("get room capacity");
-        let max_capacity = u32::max_value();
+        let max_capacity = 2;
 
         // Act
         let room = Room::new(name.clone(), max_capacity);
+        assert!(room.is_ok());
 
         // Assert
-        assert!(room.is_ok());
         assert_eq!(room.unwrap().get_max_capacity(), max_capacity);
+    }
+
+    #[test]
+    fn change_room_name_test() {
+        // Arrange
+        let name = String::from("original room name");
+        let max_capacity = 3;
+
+        let room = Room::new(name.clone(), max_capacity);
+        assert!(room.is_ok());
+        let mut room = room.unwrap();
+
+        let new_name = String::from("new room name");
+
+        // Act
+        let result = room.set_name(new_name.clone());
+
+        // Assert
+        assert!(result.is_ok());
+        assert_eq!(room.get_name(), new_name);
+    }
+
+    #[test]
+    fn cannot_change_room_name_to_empty_name_test() {
+        // Arrange
+        let name = String::from("cannot change set empty name");
+        let max_capacity = 4;
+
+        let room = Room::new(name.clone(), max_capacity);
+        assert!(room.is_ok());
+        let mut room = room.unwrap();
+
+        let new_name = String::from("");
+
+        // Act
+        let result = room.set_name(new_name.clone());
+
+        // Assert
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err(), RoomError::EmptyNameError);
+    }
+
+    #[test]
+    fn change_room_max_capacity_test() {
+        // Arrange
+        let name = String::from("change room capacity");
+        let max_capacity = 5;
+
+        let room = Room::new(name.clone(), max_capacity);
+        assert!(room.is_ok());
+        let mut room = room.unwrap();
+
+        let new_max_capacity = 1;
+
+        // Act
+        let result = room.set_max_capacity(new_max_capacity);
+
+        // Assert
+        assert!(result.is_ok());
+        assert_eq!(room.get_max_capacity(), new_max_capacity);
+    }
+
+    #[test]
+    fn cannot_change_room_max_capacity_to_0_test() {
+        // Arrange
+        let name = String::from("cannot change room capacity to 0");
+        let max_capacity = 6;
+
+        let room = Room::new(name.clone(), max_capacity);
+        assert!(room.is_ok());
+        let mut room = room.unwrap();
+
+        let new_max_capacity = 0;
+
+        // Act
+        let result = room.set_max_capacity(new_max_capacity);
+
+        // Assert
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err(), RoomError::MaxCapacityError);
     }
 }
