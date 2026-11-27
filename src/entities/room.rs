@@ -1,9 +1,9 @@
-use crate::entities::errors::room_error::RoomError;
+use crate::entities::{errors::room_error::RoomError, types::positive_number::PositiveNumber};
 
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
 pub struct Room {
     name: String,
-    max_capacity: u32,
+    max_capacity: PositiveNumber,
 }
 
 impl Room {
@@ -12,13 +12,10 @@ impl Room {
         if name.is_empty() {
             return Err(RoomError::EmptyNameError);
         }
-        if max_capacity == 0 {
-            return Err(RoomError::MaxCapacityError);
-        }
 
         Ok(Self {
-            name: name,
-            max_capacity: max_capacity,
+            name,
+            max_capacity: PositiveNumber::new(max_capacity)?,
         })
     }
 
@@ -28,8 +25,8 @@ impl Room {
     }
 
     /// Getter for the room max capacity
-    pub fn get_max_capacity(&self) -> u32 {
-        self.max_capacity
+    pub fn get_max_capacity(&self) -> PositiveNumber {
+        self.max_capacity.clone()
     }
 
     /// Setter for the room name
@@ -43,16 +40,15 @@ impl Room {
 
     /// Setter for the room name
     pub fn set_max_capacity(&mut self, max_capacity: u32) -> Result<(), RoomError> {
-        if max_capacity == 0 {
-            return Err(RoomError::MaxCapacityError);
-        }
-        self.max_capacity = max_capacity;
+        self.max_capacity = PositiveNumber::new(max_capacity)?;
         Ok(())
     }
 }
 
 #[cfg(test)]
 mod tests {
+    use crate::entities::types::errors::positive_number_error::PositiveNumberError;
+
     use super::*;
 
     #[test]
@@ -70,7 +66,7 @@ mod tests {
             room.unwrap(),
             Room {
                 name: name,
-                max_capacity: max_capacity
+                max_capacity: PositiveNumber::new(max_capacity).unwrap()
             }
         );
     }
@@ -100,7 +96,10 @@ mod tests {
 
         // Assert
         assert!(room.is_err());
-        assert_eq!(room.unwrap_err(), RoomError::MaxCapacityError);
+        assert_eq!(
+            room.unwrap_err(),
+            RoomError::PositiveNumberError(PositiveNumberError::NumberIsZero)
+        );
     }
 
     #[test]
@@ -128,7 +127,10 @@ mod tests {
         assert!(room.is_ok());
 
         // Assert
-        assert_eq!(room.unwrap().get_max_capacity(), max_capacity);
+        assert_eq!(
+            room.unwrap().get_max_capacity(),
+            PositiveNumber::new(max_capacity).unwrap()
+        );
     }
 
     #[test]
@@ -184,11 +186,14 @@ mod tests {
         let new_max_capacity = 1;
 
         // Act
-        let result = room.set_max_capacity(new_max_capacity);
+        let result = room.set_max_capacity(new_max_capacity.clone());
 
         // Assert
         assert!(result.is_ok());
-        assert_eq!(room.get_max_capacity(), new_max_capacity);
+        assert_eq!(
+            room.get_max_capacity(),
+            PositiveNumber::new(new_max_capacity).unwrap()
+        );
     }
 
     #[test]
@@ -208,6 +213,9 @@ mod tests {
 
         // Assert
         assert!(result.is_err());
-        assert_eq!(result.unwrap_err(), RoomError::MaxCapacityError);
+        assert_eq!(
+            result.unwrap_err(),
+            RoomError::PositiveNumberError(PositiveNumberError::NumberIsZero)
+        );
     }
 }
