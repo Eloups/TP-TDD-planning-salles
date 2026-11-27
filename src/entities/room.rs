@@ -72,7 +72,7 @@ mod tests {
     }
 
     #[test]
-    fn cannot_create_room_with_empty_name_test() {
+    fn create_room_with_empty_name_failure_test() {
         // Arrange
         let name = String::from("");
         let max_capacity = 10;
@@ -86,7 +86,7 @@ mod tests {
     }
 
     #[test]
-    fn cannot_create_room_with_0_capacity_test() {
+    fn create_room_with_0_capacity_failure_test() {
         // Arrange
         let name = String::from("0 capacity room");
         let max_capacity = 0;
@@ -154,7 +154,7 @@ mod tests {
     }
 
     #[test]
-    fn cannot_change_room_name_to_empty_name_test() {
+    fn change_room_name_to_empty_name_failure_test() {
         // Arrange
         let name = String::from("cannot change set empty name");
         let max_capacity = 4;
@@ -197,7 +197,7 @@ mod tests {
     }
 
     #[test]
-    fn cannot_change_room_max_capacity_to_0_test() {
+    fn change_room_max_capacity_to_0_failure_test() {
         // Arrange
         let name = String::from("cannot change room capacity to 0");
         let max_capacity = 6;
