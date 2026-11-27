@@ -37,6 +37,26 @@ impl Booking {
             room,
         })
     }
+
+    /// Getter for start date
+    pub fn get_start_date(&self) -> NaiveDateTime {
+        self.start_date
+    }
+
+    /// Getter for end date
+    pub fn get_end_date(&self) -> NaiveDateTime {
+        self.end_date
+    }
+
+    /// Getter for nb people
+    pub fn get_nb_people(&self) -> u32 {
+        self.nb_people.get()
+    }
+
+    /// Getter for room
+    pub fn get_room(&self) -> Room {
+        self.room.clone()
+    }
 }
 
 #[cfg(test)]
@@ -166,7 +186,7 @@ mod tests {
     #[test]
     fn creation_with_wrong_dates_failure_test() {
         // Arrange
-        let room_name = String::from("create booking full room");
+        let room_name = String::from("create booking wrong dates");
         let room_max_capacity = 9;
 
         let room = Room::new(room_name.clone(), room_max_capacity);
@@ -191,7 +211,7 @@ mod tests {
     #[test]
     fn creation_with_invalid_duration_failure_test() {
         // Arrange
-        let room_name = String::from("create booking full room");
+        let room_name = String::from("create booking duration too short");
         let room_max_capacity = 9;
 
         let room = Room::new(room_name.clone(), room_max_capacity);
@@ -216,7 +236,7 @@ mod tests {
     #[test]
     fn creation_minimum_positive_duration_test() {
         // Arrange
-        let room_name = String::from("create booking full room");
+        let room_name = String::from("create booking minimum duration");
         let room_max_capacity = 9;
 
         let room = Room::new(room_name.clone(), room_max_capacity);
@@ -243,5 +263,105 @@ mod tests {
                 room,
             }
         );
+    }
+
+    #[test]
+    fn get_start_date_test() {
+        // Arrange
+        let room_name = String::from("create booking start date");
+        let room_max_capacity = 9;
+
+        let room = Room::new(room_name.clone(), room_max_capacity);
+        assert!(room.is_ok());
+        let room = room.unwrap();
+
+        let start_date =
+            NaiveDateTime::parse_from_str("01/01/2027 12:00:00", "%d/%m/%Y %H:%M:%S").unwrap();
+        let end_date =
+            NaiveDateTime::parse_from_str("01/01/2027 12:00:01", "%d/%m/%Y %H:%M:%S").unwrap();
+        let nb_people = 9;
+
+        // Act
+        let booking = Booking::new(start_date, end_date, nb_people, room.clone());
+        assert!(booking.is_ok());
+        let booking = booking.unwrap();
+
+        // Assert
+        assert_eq!(booking.get_start_date(), start_date);
+    }
+
+    #[test]
+    fn get_end_date_test() {
+        // Arrange
+        let room_name = String::from("create booking end date");
+        let room_max_capacity = 9;
+
+        let room = Room::new(room_name.clone(), room_max_capacity);
+        assert!(room.is_ok());
+        let room = room.unwrap();
+
+        let start_date =
+            NaiveDateTime::parse_from_str("01/01/2027 12:00:00", "%d/%m/%Y %H:%M:%S").unwrap();
+        let end_date =
+            NaiveDateTime::parse_from_str("01/01/2027 12:00:01", "%d/%m/%Y %H:%M:%S").unwrap();
+        let nb_people = 9;
+
+        // Act
+        let booking = Booking::new(start_date, end_date, nb_people, room.clone());
+        assert!(booking.is_ok());
+        let booking = booking.unwrap();
+
+        // Assert
+        assert_eq!(booking.get_end_date(), end_date);
+    }
+
+    #[test]
+    fn get_nb_people_test() {
+        // Arrange
+        let room_name = String::from("create booking nb people");
+        let room_max_capacity = 9;
+
+        let room = Room::new(room_name.clone(), room_max_capacity);
+        assert!(room.is_ok());
+        let room = room.unwrap();
+
+        let start_date =
+            NaiveDateTime::parse_from_str("01/01/2027 12:00:00", "%d/%m/%Y %H:%M:%S").unwrap();
+        let end_date =
+            NaiveDateTime::parse_from_str("01/01/2027 12:00:01", "%d/%m/%Y %H:%M:%S").unwrap();
+        let nb_people = 9;
+
+        // Act
+        let booking = Booking::new(start_date, end_date, nb_people, room.clone());
+        assert!(booking.is_ok());
+        let booking = booking.unwrap();
+
+        // Assert
+        assert_eq!(booking.get_nb_people(), nb_people);
+    }
+
+    #[test]
+    fn get_room_test() {
+        // Arrange
+        let room_name = String::from("create booking nb people");
+        let room_max_capacity = 9;
+
+        let room = Room::new(room_name.clone(), room_max_capacity);
+        assert!(room.is_ok());
+        let room = room.unwrap();
+
+        let start_date =
+            NaiveDateTime::parse_from_str("01/01/2027 12:00:00", "%d/%m/%Y %H:%M:%S").unwrap();
+        let end_date =
+            NaiveDateTime::parse_from_str("01/01/2027 12:00:01", "%d/%m/%Y %H:%M:%S").unwrap();
+        let nb_people = 9;
+
+        // Act
+        let booking = Booking::new(start_date, end_date, nb_people, room.clone());
+        assert!(booking.is_ok());
+        let booking = booking.unwrap();
+
+        // Assert
+        assert_eq!(booking.get_room(), room);
     }
 }
