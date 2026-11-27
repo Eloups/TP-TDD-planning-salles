@@ -3,20 +3,20 @@ use crate::entities::{
 };
 
 use super::room::Room;
-use chrono::{DateTime, Utc};
+use chrono::NaiveDateTime;
 
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
 pub struct Booking {
-    start_date: DateTime<Utc>,
-    end_date: DateTime<Utc>,
+    start_date: NaiveDateTime,
+    end_date: NaiveDateTime,
     nb_people: PositiveNumber,
     room: Room,
 }
 
 impl Booking {
     pub fn new(
-        start_date: DateTime<Utc>,
-        end_date: DateTime<Utc>,
+        start_date: NaiveDateTime,
+        end_date: NaiveDateTime,
         nb_people: u32,
         room: Room,
     ) -> Result<Self, BookingError> {
@@ -47,7 +47,6 @@ mod tests {
     };
 
     use super::*;
-    use chrono::prelude::*;
 
     #[test]
     fn create_booking_test() {
@@ -59,8 +58,10 @@ mod tests {
         assert!(room.is_ok());
         let room = room.unwrap();
 
-        let start_date = Utc.with_ymd_and_hms(2027, 1, 1, 8, 0, 0).unwrap();
-        let end_date = Utc.with_ymd_and_hms(2027, 1, 1, 12, 0, 0).unwrap();
+        let start_date =
+            NaiveDateTime::parse_from_str("01/01/2027 08:00:00", "%d/%m/%Y %H:%M:%S").unwrap();
+        let end_date =
+            NaiveDateTime::parse_from_str("01/01/2027 12:00:00", "%d/%m/%Y %H:%M:%S").unwrap();
         let nb_people = 2;
 
         // Act
@@ -89,8 +90,10 @@ mod tests {
         assert!(room.is_ok());
         let room = room.unwrap();
 
-        let start_date = Utc.with_ymd_and_hms(2020, 2, 3, 18, 0, 0).unwrap();
-        let end_date = Utc.with_ymd_and_hms(2020, 8, 4, 12, 3, 10).unwrap();
+        let start_date =
+            NaiveDateTime::parse_from_str("03/02/2020 18:00:00", "%d/%m/%Y %H:%M:%S").unwrap();
+        let end_date =
+            NaiveDateTime::parse_from_str("04/08/2020 12:00:00", "%d/%m/%Y %H:%M:%S").unwrap();
         let nb_people = 0;
 
         // Act
@@ -114,8 +117,10 @@ mod tests {
         assert!(room.is_ok());
         let room = room.unwrap();
 
-        let start_date = Utc.with_ymd_and_hms(2020, 2, 3, 18, 0, 0).unwrap();
-        let end_date = Utc.with_ymd_and_hms(2020, 2, 4, 12, 3, 10).unwrap();
+        let start_date =
+            NaiveDateTime::parse_from_str("03/02/2020 18:00:00", "%d/%m/%Y %H:%M:%S").unwrap();
+        let end_date =
+            NaiveDateTime::parse_from_str("04/02/2020 12:03:10", "%d/%m/%Y %H:%M:%S").unwrap();
         let nb_people = 9;
 
         // Act
@@ -136,8 +141,10 @@ mod tests {
         assert!(room.is_ok());
         let room = room.unwrap();
 
-        let start_date = Utc.with_ymd_and_hms(2027, 1, 1, 8, 0, 0).unwrap();
-        let end_date = Utc.with_ymd_and_hms(2027, 1, 1, 12, 0, 0).unwrap();
+        let start_date =
+            NaiveDateTime::parse_from_str("01/01/2027 08:00:00", "%d/%m/%Y %H:%M:%S").unwrap();
+        let end_date =
+            NaiveDateTime::parse_from_str("01/01/2027 12:00:00", "%d/%m/%Y %H:%M:%S").unwrap();
         let nb_people = 9;
 
         // Act
@@ -166,8 +173,10 @@ mod tests {
         assert!(room.is_ok());
         let room = room.unwrap();
 
-        let start_date = Utc.with_ymd_and_hms(2027, 1, 1, 13, 0, 0).unwrap();
-        let end_date = Utc.with_ymd_and_hms(2027, 1, 1, 12, 0, 0).unwrap();
+        let start_date =
+            NaiveDateTime::parse_from_str("01/01/2027 13:00:00", "%d/%m/%Y %H:%M:%S").unwrap();
+        let end_date =
+            NaiveDateTime::parse_from_str("01/01/2027 12:00:00", "%d/%m/%Y %H:%M:%S").unwrap();
         let nb_people = 9;
 
         // Act
@@ -189,8 +198,10 @@ mod tests {
         assert!(room.is_ok());
         let room = room.unwrap();
 
-        let start_date = Utc.with_ymd_and_hms(2027, 1, 1, 12, 0, 0).unwrap();
-        let end_date = Utc.with_ymd_and_hms(2027, 1, 1, 12, 0, 0).unwrap();
+        let start_date =
+            NaiveDateTime::parse_from_str("01/01/2027 12:00:00", "%d/%m/%Y %H:%M:%S").unwrap();
+        let end_date =
+            NaiveDateTime::parse_from_str("01/01/2027 12:00:00", "%d/%m/%Y %H:%M:%S").unwrap();
         let nb_people = 9;
 
         // Act
@@ -212,8 +223,10 @@ mod tests {
         assert!(room.is_ok());
         let room = room.unwrap();
 
-        let start_date = Utc.with_ymd_and_hms(2027, 1, 1, 12, 0, 0).unwrap();
-        let end_date = Utc.with_ymd_and_hms(2027, 1, 1, 12, 0, 1).unwrap();
+        let start_date =
+            NaiveDateTime::parse_from_str("01/01/2027 12:00:00", "%d/%m/%Y %H:%M:%S").unwrap();
+        let end_date =
+            NaiveDateTime::parse_from_str("01/01/2027 12:00:01", "%d/%m/%Y %H:%M:%S").unwrap();
         let nb_people = 9;
 
         // Act
