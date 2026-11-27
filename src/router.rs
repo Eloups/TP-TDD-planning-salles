@@ -4,29 +4,25 @@ use axum::{
     routing::{get, post},
 };
 
+use crate::database::Database;
+
 /// Construit le router de l'application.
 /// Séparé de `main` pour pouvoir le tester sans ouvrir de port
-/// (via `tower::ServiceExt::oneshot`).
-pub fn app() -> Router {
+pub fn app(database: Database) -> Router {
     Router::new()
-        .route("/health", get(health))
-        // 1. Gestion des salles
         .route("/salles", get(lister_salles).post(creer_salle))
         .route(
             "/salles/{id}",
-            get(obtenir_salle).put(modifier_salle).delete(supprimer_salle),
+            get(obtenir_salle)
+                .put(modifier_salle)
+                .delete(supprimer_salle),
         )
-        // 4. Réservations d'une salle
         .route("/salles/{id}/reservations", get(reservations_de_salle))
-        // 2. Réserver une salle / 4. Réservations d'un jour (?date=YYYY-MM-DD)
         .route(
             "/reservations",
             post(creer_reservation).get(reservations_du_jour),
         )
-}
-
-async fn health() -> &'static str {
-    "ok"
+        .with_state(database)
 }
 
 async fn lister_salles() -> StatusCode {
